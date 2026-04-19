@@ -1,0 +1,26 @@
+Language: Cpp
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 100
+AccessModifierOffset: -4
+
+BreakBeforeBraces: Attach
+AllowShortBlocksOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: false
+
+SpaceAfterCStyleCast: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: ControlStatements
+ContinuationIndentWidth: 4
+
+InsertNewlineAtEOF: true
+
+SortIncludes: CaseInsensitive
+IncludeBlocks: Preserve
+
+ReflowComments: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1
+...
