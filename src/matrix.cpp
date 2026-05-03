@@ -2,6 +2,8 @@
 #include "include/linalg/exceptions.hpp"
 #include "include/linalg/matrix.hpp"
 #include <sstream>
+#include <type_traits>
+#include <limits>
 #include <string>
 #include <cmath>
 #include <iostream>
@@ -99,6 +101,41 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T>& other) const {
                 sum += this->at(i, k) * other.at(k, j);
             }
             result.set(i, j, sum);
+        }
+    }
+    return result;
+}
+
+template <typename T>
+bool Matrix<T>::operator==(const Matrix<T>& other) const {
+    if (rows_ != other.rows_ || cols_ != other.cols_) {
+        return false;
+    }
+
+    if constexpr (std::is_floating_point_v<T>) {
+        const T eps = std::numeric_limits<T>::epsilon() * 100;
+        for (std::size_t i = 0; i < data_.size(); ++i) {
+            if (std::abs(data_[i] - other.data_[i]) > eps) {
+                return false;
+            }
+        }
+    } else {
+        for (std::size_t i = 0; i < data_.size(); ++i) {
+            if (data_[i] != other.data_[i]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::transpose() const {
+    Matrix<T> result(cols_, rows_);
+
+    for (std::size_t i = 0; i < rows_; ++i) {
+        for (std::size_t j = 0; j < cols_; ++j) {
+            result.set(j, i, this->at(i, j));
         }
     }
     return result;
