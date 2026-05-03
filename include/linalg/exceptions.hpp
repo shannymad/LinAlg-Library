@@ -14,4 +14,4 @@ public:
   explicit IndexOutOfBounds(const std::string &msg)
       : std::out_of_range("Index out of bounds" + msg) {}
 };
-} // namespace linalg
+} 
