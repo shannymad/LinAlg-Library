@@ -42,7 +42,7 @@ friend std::ostream &operator<<(std::ostream &os, const Matrix<T> &matrix);
 
 private:
 std::size_t rows_ = 0;
-std::size_t cols_;
+std::size_t cols_ = 0;
 std::vector<T> data_;
 
 void check_index(std::size_t i, std::size_t j) const;
