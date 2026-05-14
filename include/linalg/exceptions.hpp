@@ -4,14 +4,20 @@
 
 namespace linalg {
 class DimensionError : public std::invalid_argument {
-public:
-  explicit DimensionError(const std::string &msg)
-      : std::invalid_argument("Dimension Error: " + msg) {}
+   public:
+    explicit DimensionError(const std::string& msg)
+        : std::invalid_argument("Dimension Error: " + msg) {}
 };
 
 class IndexOutOfBounds : public std::out_of_range {
-public:
-  explicit IndexOutOfBounds(const std::string &msg)
-      : std::out_of_range("Index out of bounds" + msg) {}
+   public:
+    explicit IndexOutOfBounds(const std::string& msg)
+        : std::out_of_range("Index out of bounds" + msg) {}
 };
-} 
+
+class SingularMatrixError : public std::domain_error {
+   public:
+    explicit SingularMatrixError(const std::string& msg)
+        : std::domain_error("Matrix is singular") {}
+};
+}  // namespace linalg

@@ -1,8 +1,8 @@
 #pragma once
-#include "matrix.hpp"
-#include "exceptions.hpp"
 #include <cmath>
 #include <limits>
+#include "exceptions.hpp"
+#include "matrix.hpp"
 
 namespace linalg {
 
@@ -57,23 +57,23 @@ Matrix<T> solve_linear_system(const Matrix<T>& A, const Matrix<T>& b) {
     if (A.rows() != A.cols()) {
         throw DimensionError("A must be square");
     }
-    
+
     if (A.rows() != b.rows() || b.cols() != 1) {
         throw DimensionError("b must be a column vector with the same number of rows as A");
     }
 
     std::size_t n = A.rows();
     const T eps = std::numeric_limits<T>::epsilon() * 1000;
-    
+
     Matrix<T> aug(n, n + 1);
-    
+
     for (std::size_t i = 0; i < n; ++i) {
         for (std::size_t j = 0; j < n; ++j) {
             aug.set(i, j, A.at(i, j));
         }
         aug.set(i, n, b.at(i, 0));
     }
-    
+
     for (std::size_t col = 0; col < n; ++col) {
         std::size_t pivot_row = col;
         for (std::size_t row = col + 1; row < n; ++row) {
@@ -81,17 +81,17 @@ Matrix<T> solve_linear_system(const Matrix<T>& A, const Matrix<T>& b) {
                 pivot_row = row;
             }
         }
-        
+
         if (std::abs(aug.at(pivot_row, col)) < eps) {
             throw SingularMatrixError();
         }
-        
+
         if (pivot_row != col) {
             for (std::size_t k = 0; k <= n; ++k) {
                 std::swap(aug.data_[col * (n + 1) + k], aug.data_[pivot_row * (n + 1) + k]);
             }
         }
-        
+
         for (std::size_t row = col + 1; row < n; ++row) {
             T factor = aug.at(row, col) / aug.at(col, col);
             for (std::size_t k = col; k <= n; ++k) {
@@ -99,7 +99,7 @@ Matrix<T> solve_linear_system(const Matrix<T>& A, const Matrix<T>& b) {
             }
         }
     }
-    
+
     Matrix<T> x(n, 1);
     for (std::size_t i = n; i-- > 0;) {
         T sum = aug.at(i, n);
@@ -108,8 +108,67 @@ Matrix<T> solve_linear_system(const Matrix<T>& A, const Matrix<T>& b) {
         }
         x.set(i, 0, sum / aug.at(i, i));
     }
-    
+
     return x;
 }
 
+template <typename T>
+Matrix<T> invert(const Matrix<T>& A) {
+    if (A.rows() != A.cols()) {
+        throw DimensionError("Cannot invert non-square matrix");
+    }
+
+    std::size_t n = A.rows();
+    const T eps = std::numeric_limits<T>::epsilon() * 1000;
+    Matrix<T> aug(n, 2 * n);
+
+    for (std::size_t i = 0; i < n; ++i) {
+        for (std::size_t j = 0; j < n; ++j) {
+            aug.set(i, j, A.at(i, j));
+        }
+        aug.set(i, n + i, T{1});
+    }
+
+    for (std::size_t col = 0; col < n; ++col) {
+        std::size_t pivot_row = col;
+        for (std::size_t row = col + 1; row < n; ++row) {
+            if (std::abs(aug.at(row, col)) > std::abs(aug.at(pivot_row, col))) {
+                pivot_row = row;
+            }
+        }
+
+        if (std::abs(aug.at(pivot_row, col)) < eps) {
+            throw SingularMatrixError("Matrix is singular, cannot invert");
+        }
+
+        if (pivot_row != col) {
+            for (std::size_t k = 0; k < 2 * n; ++k) {
+                std::swap(aug.data_[col * (2 * n) + k], aug.data_[pivot_row * (2 * n) + k]);
+            }
+        }
+
+        T pivot_val = aug.at(col, col);
+        for (std::size_t k = 0; k < 2 * n; ++k) {
+            aug.set(col, k, aug.at(col, k) / pivot_val);
+        }
+
+        for (std::size_t row = 0; row < n; ++row) {
+            if (row != col) {
+                T factor = aug.at(row, col);
+                for (std::size_t k = 0; k < 2 * n; ++k) {
+                    aug.set(row, k, aug.at(row, k) - factor * aug.at(col, k));
+                }
+            }
+        }
+    }
+
+    Matrix<T> result(n, n);
+    for (std::size_t i = 0; i < n; ++i) {
+        for (std::size_t j = 0; j < n; ++j) {
+            result.set(i, j, aug.at(i, n + j));
+        }
+    }
+
+    return result;
 }
+}  // namespace linalg

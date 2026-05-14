@@ -1,26 +1,29 @@
+---
 Language: Cpp
+BasedOnStyle: Google
 
 IndentWidth: 4
 TabWidth: 4
 UseTab: Never
-ColumnLimit: 100
-AccessModifierOffset: -4
+ContinuationIndentWidth: 4
 
 BreakBeforeBraces: Attach
 AllowShortBlocksOnASingleLine: false
 AllowShortIfStatementsOnASingleLine: false
 
+ColumnLimit: 100
 SpaceAfterCStyleCast: false
 SpaceBeforeAssignmentOperators: true
 SpaceBeforeParens: ControlStatements
-ContinuationIndentWidth: 4
+
+AllowAllParametersOfDeclarationOnNextLine: false
+BinPackArguments: false
+BinPackParameters: false
 
 InsertNewlineAtEOF: true
 
 SortIncludes: CaseInsensitive
 IncludeBlocks: Preserve
 
-ReflowComments: true
-KeepEmptyLinesAtTheStartOfBlocks: false
-MaxEmptyLinesToKeep: 1
-...
+NamespaceIndentation: None
+IndentCaseLabels: true

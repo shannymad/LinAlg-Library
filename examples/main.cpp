@@ -1,28 +1,26 @@
-#include "include/linalg/matrix.hpp"
-#include "include/linalg/algorithms.hpp"
-#include <iostream>
-#include <cmath>
 #include <cassert>
+#include <cmath>
+#include <iostream>
 #include <limits>
-
-
+#include "include/linalg/algorithms.hpp"
+#include "include/linalg/matrix.hpp"
 
 template <typename T>
-bool approximately_equal(const linalg::Matrix<T>& first, const linalg::Matrix<T>& second, T eps = T{1e-6}) {
-if (first.rows() != second.rows() || first.cols() != second.cols()) {
-    return false;
-}
-for (std::size_t i = 0; i < first.rows(); ++i) {
-    for (std::size_t j = 0; j < first.cols(); ++j) {
-        if (std::abs(first.at(i, j) - second.at(i, j)) > eps) {
-            return false;
-        }
+bool approximately_equal(const linalg::Matrix<T>& first,
+                         const linalg::Matrix<T>& second,
+                         T eps = T{1e-6}) {
+    if (first.rows() != second.rows() || first.cols() != second.cols()) {
+        return false;
     }
-    return true;
+    for (std::size_t i = 0; i < first.rows(); ++i) {
+        for (std::size_t j = 0; j < first.cols(); ++j) {
+            if (std::abs(first.at(i, j) - second.at(i, j)) > eps) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
-
-}
-
 
 int main() {
     using namespace linalg;
@@ -38,17 +36,16 @@ int main() {
         assert(m.cols() == 2);
         assert(m.at(0, 0) == 5.0);
         assert(m.at(1, 1) == 5.0);
-        
+
         m.set(0, 1, 10.0);
         assert(m.at(0, 1) == 10.0);
-        
+
         std::cout << "[PASS] Test 1: Construction and Access\n";
         tests_passed++;
     } catch (...) {
         std::cout << "[FAIL] Test 1: Construction and Access\n";
     }
--
-    tests_total++;
+    -tests_total++;
     try {
         Matrix<int> m(2, 2);
         m.at(2, 0);
@@ -63,20 +60,22 @@ int main() {
     tests_total++;
     try {
         Matrix<double> A(2, 2);
-        A.set(0, 0, 1); A.set(0, 1, 2);
-        A.set(1, 0, 3); A.set(1, 1, 4);
+        A.set(0, 0, 1);
+        A.set(0, 1, 2);
+        A.set(1, 0, 3);
+        A.set(1, 1, 4);
 
         Matrix<double> B(2, 2, 1);
 
         Matrix<double> C = A + B;
-        assert(C.at(0, 0) == 2.0); // 1+1
-        assert(C.at(1, 1) == 5.0); // 4+1
+        assert(C.at(0, 0) == 2.0);  // 1+1
+        assert(C.at(1, 1) == 5.0);  // 4+1
 
         Matrix<double> D = A - B;
-        assert(D.at(0, 1) == 1.0); // 2-1
+        assert(D.at(0, 1) == 1.0);  // 2-1
 
         Matrix<double> E = A * 2.0;
-        assert(E.at(1, 0) == 6.0); // 3*2
+        assert(E.at(1, 0) == 6.0);  // 3*2
 
         Matrix<double> F = A * A;
         // A*A = [1*1+2*3, 1*2+2*4] = [7, 10]
@@ -93,16 +92,20 @@ int main() {
     tests_total++;
     try {
         Matrix<double> M(2, 3);
-        M.set(0, 0, 1); M.set(0, 1, 2); M.set(0, 2, 3);
-        M.set(1, 0, 4); M.set(1, 1, 5); M.set(1, 2, 6);
+        M.set(0, 0, 1);
+        M.set(0, 1, 2);
+        M.set(0, 2, 3);
+        M.set(1, 0, 4);
+        M.set(1, 1, 5);
+        M.set(1, 2, 6);
 
         Matrix<double> MT = M.transpose();
-        
+
         assert(MT.rows() == 3);
         assert(MT.cols() == 2);
-        assert(MT.at(0, 0) == 1); // [0][0] -> [0][0]
-        assert(MT.at(1, 0) == 2); // [0][1] -> [1][0]
-        assert(MT.at(2, 1) == 6); // [1][2] -> [2][1]
+        assert(MT.at(0, 0) == 1);  // [0][0] -> [0][0]
+        assert(MT.at(1, 0) == 2);  // [0][1] -> [1][0]
+        assert(MT.at(2, 1) == 6);  // [1][2] -> [2][1]
 
         assert(MT.transpose() == M);
 
@@ -126,7 +129,7 @@ int main() {
         Y.set(1, 0, 3.0);
         Y.set(1, 1, 4.0);
 
-        assert(X == Y); 
+        assert(X == Y);
 
         Matrix<double> Z(2, 2, 10.0);
         assert(!(X == Z));
@@ -143,23 +146,32 @@ int main() {
         // | 0 1 4 |
         // | 5 6 0 |
         Matrix<double> D(3, 3);
-        D.set(0, 0, 1); D.set(0, 1, 2); D.set(0, 2, 3);
-        D.set(1, 0, 0); D.set(1, 1, 1); D.set(1, 2, 4);
-        D.set(2, 0, 5); D.set(2, 1, 6); D.set(2, 2, 0);
+        D.set(0, 0, 1);
+        D.set(0, 1, 2);
+        D.set(0, 2, 3);
+        D.set(1, 0, 0);
+        D.set(1, 1, 1);
+        D.set(1, 2, 4);
+        D.set(2, 0, 5);
+        D.set(2, 1, 6);
+        D.set(2, 2, 0);
 
         double det = compute_determinant_gauss(D);
-        
+
         if (std::abs(det - 1.0) < 1e-5) {
             std::cout << "[PASS] Test 6: Determinant Calculation (Det = " << det << ")\n";
             tests_passed++;
         } else {
-            std::cout << "[FAIL] Test 6: Determinant Calculation (Expected 1.0, Got " << det << ")\n";
+            std::cout << "[FAIL] Test 6: Determinant Calculation (Expected 1.0, Got " << det
+                      << ")\n";
         }
 
         Matrix<double> Singular(2, 2);
-        Singular.set(0, 0, 1); Singular.set(0, 1, 2);
-        Singular.set(1, 0, 2); Singular.set(1, 1, 4);
-        
+        Singular.set(0, 0, 1);
+        Singular.set(0, 1, 2);
+        Singular.set(1, 0, 2);
+        Singular.set(1, 1, 4);
+
         double det_sing = compute_determinant_gauss(Singular);
         if (std::abs(det_sing) < 1e-9) {
             std::cout << "[PASS] Test 6b: Singular Matrix Determinant (Det = " << det_sing << ")\n";
@@ -176,12 +188,63 @@ int main() {
 
     std::cout << "\n==========================\n";
     std::cout << "Tests passed: " << tests_passed << " / " << tests_total << "\n";
-    
+
     if (tests_passed == tests_total) {
         std::cout << "SUCCESS: All tests passed!\n";
         return 0;
     } else {
         std::cout << "FAILURE: Some tests failed.\n";
         return 1;
+    }
+
+    tests_total++;
+    try {
+        // A| 1 2 |
+        //              | 3 4 |
+        // A_inv : | -2   1 |
+        //                       | 1.5 -0.5|
+
+        Matrix<double> A(2, 2);
+        A.set(0, 0, 1);
+        A.set(0, 1, 2);
+        A.set(1, 0, 3);
+        A.set(1, 1, 4);
+
+        Matrix<double> A_inv = invert(A);
+
+        Matrix<double> I_check = A * A_inv;
+
+        Matrix<double> I_true(2, 2);
+        I_true.set(0, 0, 1);
+        I_true.set(1, 1, 1);
+
+        if (approximately_equal(I_check, I_true, 1e-6)) {
+            std::cout << "[PASS] Test 7: Matrix Inversion\n";
+            tests_passed++;
+        } else {
+            std::cout << "[FAIL] Test 7: Matrix Inversion (Result not identity)\n";
+            std::cout << "A * A_inv =\n" << I_check << "\n";
+        }
+
+        Matrix<double> Sing(2, 2);
+        Sing.set(0, 0, 1);
+        Sing.set(0, 1, 2);
+        Sing.set(1, 0, 2);
+        Sing.set(1, 1, 4);
+
+        try {
+            invert(Sing);
+            std::cout << "[FAIL] Test 7b: Should have thrown for singular matrix\n";
+        } catch (const SingularMatrixError&) {
+            std::cout << "[PASS] Test 7b: Singular Matrix Exception\n";
+            tests_passed++;
+            tests_total++;
+        } catch (...) {
+            std::cout << "[FAIL] Test 7b: Wrong exception type\n";
+            tests_total++;
+        }
+
+    } catch (const std::exception& e) {
+        std::cout << "[FAIL] Test 7: Exception: " << e.what() << "\n";
     }
 }

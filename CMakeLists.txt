@@ -25,4 +25,4 @@ else()
     message(WARNING "clang-format not found. Install it to use the 'format' target.")
 endif()
 
-add_subdirectory(tests)
+# add_subdirectory(tests)

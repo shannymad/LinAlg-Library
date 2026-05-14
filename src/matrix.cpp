@@ -1,12 +1,12 @@
 #pragma once
-#include "include/linalg/exceptions.hpp"
 #include "include/linalg/matrix.hpp"
-#include <sstream>
-#include <type_traits>
-#include <limits>
-#include <string>
 #include <cmath>
 #include <iostream>
+#include <limits>
+#include <sstream>
+#include <string>
+#include <type_traits>
+#include "include/linalg/exceptions.hpp"
 
 namespace linalg {
 
@@ -20,9 +20,8 @@ Matrix<T>::Matrix(std::size_t rows, std::size_t cols, const T& value)
 template <typename T>
 void Matrix<T>::check_index(std::size_t i, std::size_t j) const {
     if (i >= rows_ || j >= cols_) {
-        std::string msg = "Trying to access (" + std::to_string(i) + ", " +
-                          std::to_string(j) + ") in " + std::to_string(rows_) +
-                          "x" + std::to_string(cols_) + " matrix";
+        std::string msg = "Trying to access (" + std::to_string(i) + ", " + std::to_string(j) +
+                          ") in " + std::to_string(rows_) + "x" + std::to_string(cols_) + " matrix";
         throw IndexOutOfBounds(msg);
     }
 }
@@ -31,8 +30,8 @@ template <typename T>
 void Matrix<T>::check_dimensions(const Matrix<T>& other, const std::string& operation) const {
     if (rows_ != other.rows_ || cols_ != other.cols_) {
         std::string msg = "Cannot perform " + operation + ": dimensions mismatch (" +
-                          std::to_string(rows_) + "x" + std::to_string(cols_) +
-                          " vs " + std::to_string(other.rows_) + "x" + std::to_string(other.cols_) + ")";
+                          std::to_string(rows_) + "x" + std::to_string(cols_) + " vs " +
+                          std::to_string(other.rows_) + "x" + std::to_string(other.cols_) + ")";
         throw DimensionError(msg);
     }
 }
@@ -145,11 +144,13 @@ template <typename T>
 std::ostream& operator<<(std::ostream& os, const Matrix<T>& m) {
     os << "[";
     for (std::size_t i = 0; i < m.rows_; ++i) {
-        if (i > 0) os << "\n ";
+        if (i > 0)
+            os << "\n ";
         os << "[";
         for (std::size_t j = 0; j < m.cols_; ++j) {
             os << m.at(i, j);
-            if (j + 1 < m.cols_) os << ", ";
+            if (j + 1 < m.cols_)
+                os << ", ";
         }
         os << "]";
     }
@@ -162,4 +163,4 @@ Matrix<T> operator*(const T& scalar, const Matrix<T>& matrix) {
     return matrix * scalar;
 }
 
-}
+}  // namespace linalg
